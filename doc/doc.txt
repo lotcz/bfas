@@ -1,0 +1,31 @@
+TO DO:
+	-	design
+	-	google analytics
+	-	localization by browser language
+	-	emails
+	
+
+- user
+	- vloz kod
+	- zadej e-mail
+	- stahni album
+- admin
+	- generuj novy kod
+	- prohlizej kody
+	- smaz kod
+	- zadej e-mail
+	
+	
+titulni-stranka (zadani kodu nebo e-mailu) 	-> error
+											-> stahnuti alba
+
+admin-login -> admin-hlavni-stranka -> generuj-kod
+									-> zadej-email
+
+	
+/ (zadej kod)
+/download (download files)
+/download/filename.mp3 (serve file)
+
+/admin (login)
+/admin (if auth - see codes, add new)
