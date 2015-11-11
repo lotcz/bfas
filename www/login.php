@@ -1,11 +1,13 @@
 <div class="inner cover">
-	<h1 class="cover-heading">Login</h1>
-	<form method="post" action="/download">
-		<p class="lead">Your e-mail: <input type="text" name="login" /></p>
-		<p class="lead">Password: <input type="password" name="password" /></p>
-		<p class="lead">
-			<input type="submit" class="btn btn-info" value="Submit Button">					
+	<h3 class="cover-heading">Login (for TiNG guys only)</h3>
+	<form method="post" action="/admin">
+		<p><div class="form-label" />Login: </div><input type="text" name="login" /></p>
+		<p><div class="form-label" />Password: </div><input type="password" name="password" /></p>
+		<p>
+			<input type="submit" class="btn btn-success" value="TiNG">					
 		</p>
 	</form>
-	<?php echo $message ?>
+	<div class="error-message">
+		<?php echo $message ?>
+	</div>
 </div>

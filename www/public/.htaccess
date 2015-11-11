@@ -1,4 +1,5 @@
 ErrorDocument 404 /error.html
+ErrorDocument 500 /error.html
 
 <IfModule mod_rewrite.c>
     RewriteEngine On

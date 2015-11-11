@@ -96,11 +96,8 @@ class Authentication {
 		}
 	}
 	
-	private function generateToken() {
-		$s = "";
-		for ($i = 0; $i < 50; $i++) {
-			$s .= chr(rand(97,122));
-		}
-		return $s;
+	private function generateToken() {		
+		return Tokens::generateToken(50);
 	}
+	
 }

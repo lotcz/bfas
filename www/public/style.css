@@ -4,65 +4,73 @@
 
 html,
 body {
-  height: 100%;
-  --background-color: #333;
+	height: 100%;
+	background-color: #111;
 }
 
 body {
-  --color: #fff;
-  text-align: center;
-  --text-shadow: 0 1px 3px rgba(0,0,0,.5);
+	color: #ffd500;
+	text-align: center;
+}
+
+input {
+	color:black;
 }
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
-  display: table;
-  width: 100%;
-  height: 100%; /* For at least Firefox */
-  min-height: 100%;  
+	display: table;
+	width: 100%;
+	height: 100%; /* For at least Firefox */
+	min-height: 100%;  
 }
+
 .site-wrapper-inner {
-  display: table-cell;
-  vertical-align: top;
+	display: table-cell;
+	vertical-align: top;
 }
+
 .cover-container {
-  margin-right: auto;
-  margin-left: auto;
+	margin-right: auto;
+	margin-left: auto;
 }
 
 /* Padding for spacing */
 .inner {
-  padding: 30px;
+	padding: 10px;
 }
-
 
 /*
  * Header
  */
 .masthead-brand {
-  margin-top: 10px;
-  margin-bottom: 10px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .masthead-nav > li {
-  display: inline-block;
+	display: inline-block;
 }
+
 .masthead-nav > li + li {
-  margin-left: 20px;
+	margin-left: 20px;
 }
+
 .masthead-nav > li > a {
-  padding-right: 0;
-  padding-left: 0;
-  font-size: 16px;
-  font-weight: bold;
-  border-bottom: 2px solid transparent;
+	padding-right: 0;
+	padding-left: 0;
+	font-size: 16px;
+	font-weight: bold;
+	border-bottom: 2px solid transparent;
 }
+
 .masthead-nav > li > a:hover,
 .masthead-nav > li > a:focus {
-  background-color: transparent;
-  border-bottom-color: #a9a9a9;
-  border-bottom-color: rgba(255,255,255,.25);
+	background-color: transparent;
+	border-bottom-color: #a9a9a9;
+	border-bottom-color: rgba(255,255,255,.25);
 }
+
 .masthead-nav > .active > a,
 .masthead-nav > .active > a:hover,
 .masthead-nav > .active > a:focus {
@@ -78,7 +86,6 @@ body {
     float: right;
   }
 }
-
 
 /*
  * Cover
@@ -100,6 +107,7 @@ body {
 .mastfoot {
   --color: #999; /* IE8 proofing */
   --color: rgba(255,255,255,.5);
+  font-size:11px;
 }
 
 
@@ -135,4 +143,26 @@ body {
   .cover-container {
     width: 700px;
   }
+}
+
+.code-form * {
+	vertical-align:middle;
+}
+
+.code-input {
+	font-size:30px;
+	color:black;
+	padding:0px 10px;
+	width:130px;
+	margin:10px;
+	text-transform:uppercase;
+}
+
+.error-message {
+	color:pink;
+}
+
+.voucher-code {
+	color:white;
+	font-size:30px;
 }
