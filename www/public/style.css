@@ -5,7 +5,7 @@
 html,
 body {
 	height: 100%;
-	background-color: #111;
+	background-color: #101010;
 }
 
 body {
@@ -103,13 +103,11 @@ input {
 /*
  * Footer
  */
-
 .mastfoot {
   --color: #999; /* IE8 proofing */
   --color: rgba(255,255,255,.5);
   font-size:11px;
 }
-
 
 /*
  * Affix and center
@@ -143,6 +141,20 @@ input {
   .cover-container {
     width: 700px;
   }
+}
+
+table {
+	margin:auto;
+	background-color:inherit;
+}
+
+table td {
+	padding:5px;
+	margin:5px;
+	background-color:#101022;
+	text-align:left;
+	border:solid 2px #101010;
+	color:#C0C0D0;
 }
 
 .code-form * {

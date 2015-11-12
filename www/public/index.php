@@ -1,9 +1,10 @@
 <?php
 
-	require_once '../tokens.php';
-	require_once '../auth.php';
-	require_once '../voucher.php';
-	require_once '../claim.php';
+	require_once '../classes/tokens.php';
+	require_once '../classes/auth.php';
+	require_once '../classes/voucher.php';
+	require_once '../classes/claim.php';
+	require_once '../classes/localization.php';
 	
 	$base_url = "http://bfts.loc";
 	
@@ -12,9 +13,18 @@
 		header('Location: ' . $base_url . $url, true, $statusCode);
 		die();
 	}
-		
+
+	$localization = new Localization('../lang/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+	
+	function t($s) {
+		global $localization;
+		return $localization->translate($s);
+	}
+	
 	$db = new mysqli('localhost', 'root', '', 'bfts');
 	
+	$template = "default.php";
+	$page = "front.php";
 	$message = "";
 
 	if ($db->connect_errno > 0) {
@@ -23,6 +33,7 @@
 	} else {	
 		$auth = new Authentication($db);
 		$claim = new VoucherClaim($db);
+		
 		
 		if (isset($_GET['path'])) {
 			$path = Tokens::trimSlashes(strtolower($_GET['path']));
@@ -44,9 +55,8 @@
 					}
 				}
 				if ($claim->hasVoucher()) {
-					$page = "download.php";
-				} else {
-					$page = "front.php";
+					$template = "scroll.php";
+					$page = "bfas.php";
 				}				
 				break;
 			case 'admin' :
@@ -58,6 +68,7 @@
 					}
 				}
 				if ($auth->isAuth()) {
+					$template = "scroll.php";
 					$page = "admin.php";
 				} else {				
 					$page = "login.php";
@@ -71,19 +82,22 @@
 				}
 				break;
 			case 'logout' :
-				// logout request
 				$auth->logout();
+				redirect('/');
+				break;
+			case 'forget' :
+				$claim->forgetVoucher();
 				redirect('/');
 				break;
 			default :
 				if ($auth->isAuth()) {
+					$template = "scroll.php";
 					$page = "admin.php";
 				} else {
 					if ($claim->hasVoucher()) {
-						$page = "download.php";
-					} else {
-						$page = "front.php";
-					}					
+						$template = "scroll.php";
+						$page = "bfas.php";
+					}
 				}
 		}
 		
@@ -115,40 +129,9 @@
 
 	<body>
 
-		<div class="site-wrapper">
-			<div class="site-wrapper-inner">
-				<div class="cover-container">
-				
-					<div class="masthead clearfix">
-						<div class="inner">
-							<h1 class="masthead-brand">Born For A Storm</h1>
-							<nav>
-								<ul class="nav masthead-nav">
-									<li class="active"><a href="http://tingband.com" target="_blank">tingband.com</a></li>
-									<?php 
-										if (isset($auth) && $auth->isAuth()) { 
-											echo "<li>" . $auth->user['email'] . "</li>";
-											echo "<li><a href=\"logout\">Log out</a></li>";
-										}
-									?>
-								</ul>
-							</nav>
-						</div>
-					</div>
-
-					<?php
-						include "..\\" . $page;
-					?>
-
-					<div class="mastfoot">
-						<div class="inner">
-							<p>This website was created for TiNG guys with love by <b><span style="color:purple">K</span><span style="color:red">a</span><span style="color:violet">r</span><span style="color:yellow">e</span><span style="color:green">l</span></b>.</p>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
+		<?php
+			include "../templates/" . $template;
+		?>
 
 		<!-- Bootstrap core JavaScript
 		================================================== -->
