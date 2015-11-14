@@ -4,8 +4,8 @@ class Authentication {
 	
 	private $db = null;
 	
-	private $cookie_name = "session_token";
-	
+	private $cookie_name = 'session_token';
+		
 	public $user = null;
 	
 	function __construct($auth_db) {
@@ -17,64 +17,53 @@ class Authentication {
 		return isset($this->user);
 	}
 	
-	public function login($login, $password) {
+	public function login($loginoremail, $password) {
 		
 		if (isset($_COOKIE[$this->cookie_name])) {
 			$this->logout();
 		}
 		
-		if ($statement = $this->db->prepare("SELECT * FROM users WHERE email = ? AND password = ?")) {
-			$statement->bind_param('ss', $login, $password);
-			$statement->execute();
-			$result = $statement->get_result();
-			
-			// success - create a session
-			if ($row = $result->fetch_assoc()) {
-				$this->user = $row;
+		$user = User::loadByLoginOrEmail($this->db, $loginoremail);
+		if (isset($user)) {
+			if (password_verify($password, $user->user_password_hash)) {
+				// success - create new session
+				$this->user = $user;
 				$token = $this->generateToken();
+				$token_hash = password_hash($token, PASSWORD_DEFAULT);
 				$expires = time()+60*60*24*30; //30 days
-				if ($st = $this->db->prepare("INSERT INTO user_sessions (session_token, user_id, session_expires) VALUES (?,?,?)")) {
-					$st->bind_param('sis', $token, $this->user['id'], date('Y-m-d G:i:s', $expires));
+				if ($st = $this->db->prepare('INSERT INTO user_sessions (user_session_token_hash, user_session_user_id, user_session_expires) VALUES (?,?,?)')) {
+					$st->bind_param('sis', $token_hash, $this->user->user_id, date('Y-m-d G:i:s', $expires));
 					if (!$st->execute()) {
-						die("Session db error:" . $this->db->error);
-					}
+						die('Session db error:' . $this->db->error);
+					}						
 					$st->close();
-					setcookie($this->cookie_name, $token, $expires); 
+					setcookie($this->cookie_name, $this->db->insert_id . "-" . $token, $expires, '/', false, false); 
 				} else {
-					die("Session db error:" . $this->db->error);
-				}				
+					die('Session db error:' . $this->db->error);
+				}
 			}
-			
-			$statement->close();		
-		} else {
-			die("Login db error:" . $this->db->error);
 		}
+		
 	}
 	
 	public function checkAuthentication() {
 		$this->user = null;
-		
+						
 		if (isset($_COOKIE[$this->cookie_name])) {
-			$token_value = $_COOKIE[$this->cookie_name];
+			$arr = explode("-", $_COOKIE[$this->cookie_name]);
+			$session_id = $arr[0];
+			$session_token = $arr[1];
 		}
 		
-		if (isset($token_value)) {
-			$statement = $this->db->prepare("SELECT user_id FROM user_sessions WHERE session_token = ?");
-			$statement->bind_param('s', $token_value);
+		if (isset($session_id)) {
+			$statement = $this->db->prepare('SELECT user_session_user_id, user_session_token_hash FROM user_sessions WHERE user_session_id = ?');
+			$statement->bind_param('i', $session_id);
 			$statement->execute();
-			$statement->bind_result($id);
+			$statement->bind_result($user_id, $session_token_hash);			
 			$statement->fetch();
 			$statement->close();
-			if ($st = $this->db->prepare("SELECT * FROM users WHERE id = ?")) {
-				$st->bind_param('i',$id);
-				$st->execute();
-				$result = $st->get_result();
-				if ($row = $result->fetch_assoc()) {
-					$this->user = $row;
-				}
-				$st->close();
-			} else {
-				die("Login db error:" . $this->db->error);
+			if (password_verify($session_token, $session_token_hash)) {
+				$this->user = User::loadById($this->db, $user_id);
 			}
 		}
 	}
@@ -83,21 +72,27 @@ class Authentication {
 		$this->user = null;
 		
 		if (isset($_COOKIE[$this->cookie_name])) {
-			$token_value = $_COOKIE[$this->cookie_name];
+			$arr = explode("-", $_COOKIE[$this->cookie_name]);
+			$session_id = $arr[0];
+			$session_token = $arr[1];
 			unset($_COOKIE[$this->cookie_name]);
-			setcookie($this->cookie_name, "", time()-3600);
+			setcookie($this->cookie_name, '', time()-3600);
 		}
 		
-		if (isset($token_value)) {
-			$statement = $this->db->prepare("DELETE FROM user_sessions WHERE session_token = ?");
-			$statement->bind_param('s', $token_value);
-			$statement->execute();			
-			$statement->close();			
+		if (isset($session_id)) {
+			$statement = $this->db->prepare('DELETE FROM user_sessions WHERE user_session_id = ?');
+			$statement->bind_param('s', $session_id);
+			$statement->execute();
+			$statement->close();
 		}
 	}
 	
-	private function generateToken() {		
+	private function generateToken() {
 		return Tokens::generateToken(50);
+	}
+
+	static function hashPassword($pass) {
+		return password_hash($pass, PASSWORD_DEFAULT);
 	}
 	
 }

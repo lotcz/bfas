@@ -1,48 +1,37 @@
-<?php
-
+<?php	
+		
 	require_once '../classes/tokens.php';
+	require_once '../classes/user.php';
 	require_once '../classes/auth.php';
 	require_once '../classes/voucher.php';
 	require_once '../classes/claim.php';
 	require_once '../classes/localization.php';
 	
-	$base_url = "http://bfts.loc";
+	require_once '../classes/global.php';
 	
-	function redirect($url, $statusCode = 303) {
-		global $base_url;
-		header('Location: ' . $base_url . $url, true, $statusCode);
-		die();
-	}
-
-	$localization = new Localization('../lang/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-	
-	function t($s) {
-		global $localization;
-		return $localization->translate($s);
-	}
-	
+	$base_url = 'http://bfts.loc';
 	$db = new mysqli('localhost', 'root', '', 'bfts');
-	
-	$template = "default.php";
-	$page = "front.php";
-	$message = "";
+	$localization = new Localization('../lang/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		
+	$template = 'default.php';
+	$page = 'front.php';
+	$message = '';
 
 	if ($db->connect_errno > 0) {
 		$page = 'error.php';
-		$message = "Database connection error:" . $db->error_message;
-	} else {	
+		$message = 'Database connection error:' . $db->error_message;
+	} else {
 		$auth = new Authentication($db);
 		$claim = new VoucherClaim($db);
-		
-		
+
 		if (isset($_GET['path'])) {
-			$path = Tokens::trimSlashes(strtolower($_GET['path']));
+			$path = explode('/',trimSlashes(strtolower($_GET['path'])));
 		} else {
-			$path = '';
+			$path = [''];
 		}
-				
+
 		// select page to display
-		switch ($path) {
+		switch ($path[0]) {
 			case 'download' :
 				// voucher claim request
 				if (isset($_POST['voucher_code'])) { 
@@ -51,12 +40,12 @@
 					}
 					$claim->checkVoucherCode($_POST['voucher_code']);
 					if (!$claim->hasVoucher()) {						
-						$message = "Sorry, we do not recognize this voucher code. Try again or contact TiNG guys if you think your voucher code is correct.";
+						$message = 'Sorry, we do not recognize this voucher code. Try again or contact TiNG guys if you think your voucher code is correct.';
 					}
 				}
 				if ($claim->hasVoucher()) {
-					$template = "scroll.php";
-					$page = "bfas.php";
+					$template = 'scroll.php';
+					$page = 'bfas.php';
 				}				
 				break;
 			case 'admin' :
@@ -64,21 +53,36 @@
 				if (isset($_POST['login'])) { 
 					$auth->login($_POST['login'], $_POST['password']);
 					if (!$auth->isAuth()) {
-						$message = "Login incorrect!";
+						$message = 'Login incorrect!';
 					}
 				}
 				if ($auth->isAuth()) {
-					$template = "scroll.php";
-					$page = "admin.php";
+					$template = 'scroll.php';
+					$page = 'admin.php';
 				} else {				
-					$page = "login.php";
+					$page = 'login.php';
 				}
 				break;
 			case 'voucher' :				
 				if ($auth->isAuth()) {
-					$page = "create.php";
+					$page = 'voucher.php';
 				} else {				
-					$page = "login.php";
+					$page = 'login.php';
+				}
+				break;
+			case 'user' :				
+				if ($auth->isAuth()) {
+					$page = 'user.php';
+				} else {				
+					$page = 'login.php';
+				}
+				break;
+			case 'users' :				
+				if ($auth->isAuth()) {
+					$template = 'scroll.php';
+					$page = 'users.php';
+				} else {				
+					$page = 'login.php';
 				}
 				break;
 			case 'logout' :
@@ -91,13 +95,11 @@
 				break;
 			default :
 				if ($auth->isAuth()) {
-					$template = "scroll.php";
-					$page = "admin.php";
-				} else {
-					if ($claim->hasVoucher()) {
-						$template = "scroll.php";
-						$page = "bfas.php";
-					}
+					$template = 'scroll.php';
+					$page = 'admin.php';
+				} elseif ($claim->hasVoucher()) {
+					$template = 'scroll.php';
+					$page = 'bfas.php';					
 				}
 		}
 		
@@ -130,7 +132,7 @@
 	<body>
 
 		<?php
-			include "../templates/" . $template;
+			include '../templates/' . $template;
 		?>
 
 		<!-- Bootstrap core JavaScript
@@ -140,6 +142,8 @@
 
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+		<script src="/tools.js"></script>
 
 	</body>
 </html>

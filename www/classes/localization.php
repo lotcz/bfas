@@ -4,7 +4,7 @@ class Localization {
 	
 	function __construct($dir, $lang) {
 		$lang = strtolower(substr($lang,0,2));		
-		$file = $dir . $lang . ".php";
+		$file = $dir . $lang . '.php';
 		
 		if (file_exists($file)) {			
 			require $file;

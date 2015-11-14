@@ -9,14 +9,7 @@
 						<ul class="nav masthead-nav">
 							<li class="active"><a href="http://tingband.com" target="_blank">tingband.com</a></li>
 							<?php 
-								if (isset($auth) && $auth->isAuth()) { 
-									echo "<li>" . $auth->user['email'] . "</li>";
-									echo "<li><a href=\"/logout\">Log out</a></li>";
-								}
-								if (isset($claim) && $claim->hasVoucher()) { 
-									echo "<li><span class=\"voucher-code\">" . $claim->voucher->voucher_code . "</span></li>";
-									echo "<li><a href=\"/forget\">Forget me</a></li>";
-								}
+								include '../blocks/user.php';
 							?>
 						</ul>
 					</nav>
@@ -24,7 +17,7 @@
 			</div>
 
 			<?php
-				include "..\\pages\\" . $page;
+				include "../pages/" . $page;
 			?>
 
 			<div class="mastfoot">

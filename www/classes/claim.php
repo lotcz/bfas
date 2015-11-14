@@ -4,7 +4,7 @@ class VoucherClaim {
 	
 	private $db = null;
 	
-	private $cookie_name = "voucher_code";
+	private $cookie_name = 'voucher_code';
 	
 	public $voucher = null;
 	
@@ -46,7 +46,7 @@ class VoucherClaim {
 		if (isset($_COOKIE[$this->cookie_name])) {
 			$token_value = $_COOKIE[$this->cookie_name];
 			unset($_COOKIE[$this->cookie_name]);
-			setcookie($this->cookie_name, "", time()-3600);
+			setcookie($this->cookie_name, '', time()-3600);
 		}		
 	}
 		
