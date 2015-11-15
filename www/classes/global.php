@@ -21,3 +21,7 @@
 		}
 		return $s;
 	}
+	
+	function mysqlTimestamp($d) {
+		return date('Y-m-d G:i:s', $d);
+	}

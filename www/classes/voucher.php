@@ -57,8 +57,8 @@ class Voucher {
 	
 	public function save() {
 		if (isset($this->voucher_id)) {
-			if ($st = $this->db->prepare('UPDATE vouchers SET voucher_customer_email = ?, voucher_customer_name = ? WHERE voucher_id = ?')) {
-				$st->bind_param('sss', $this->voucher_customer_email, $this->voucher_customer_name, $this->voucher_id);
+			if ($st = $this->db->prepare('UPDATE vouchers SET voucher_customer_email = ?, voucher_customer_name = ?, voucher_used = ? WHERE voucher_id = ?')) {
+				$st->bind_param('ssss', $this->voucher_customer_email, $this->voucher_customer_name, mysqlTimestamp($this->voucher_used), $this->voucher_id);
 				if (!$st->execute()) {
 					die('Voucher db error:' . $this->db->error);
 				}

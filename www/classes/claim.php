@@ -16,7 +16,7 @@ class VoucherClaim {
 	public function hasVoucher() {
 		return isset($this->voucher);
 	}
-		
+
 	public function checkVoucher() {
 		$this->voucher = null;
 		
@@ -36,6 +36,8 @@ class VoucherClaim {
 			$this->voucher = Voucher::loadByCode($this->db, $voucher_code);
 			if (isset($this->voucher)) {
 				setcookie($this->cookie_name, $this->voucher->voucher_code, time()+60*60*24*30); // set cookie expire in 30 days
+				$this->voucher->voucher_used = time();
+				$this->voucher->save();
 			}
 		}
 	}

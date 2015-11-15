@@ -1,6 +1,6 @@
 <div class="inner cover">
 	<p>
-		<img src="bfts.jpg" alt="Born For A Storm (album cover)" />
+		<img src="bfas.jpg" alt="Born For A Storm (album cover)" />
 	</p>
 	<p><?= t('Enter your voucher code to claim your own digital copy of <b>Born For A Storm</b>:') ?></p>
 	

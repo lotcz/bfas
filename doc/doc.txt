@@ -1,10 +1,10 @@
 TO DO:
-	- save when claimed
-	- test on phone (use bootstap classes for forms)
+
 	-	DEPLOY
+	- test on phone (use bootstap classes for forms)
 	-	boast
 	-----------------------------------------
 	-	google analytics
-	-	emails
+	-	emails (forgotten password, forgotten voucher)
 	-	use Remember me option (session cookies otherwise)
 	
