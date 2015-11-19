@@ -9,4 +9,4 @@
 	$language_data['Sorry, we do not recognize this voucher code.'] = 'Hašišmarjá někde se asi stala chyba. Poukázku s tímo kódem bohužel nemůžeme najít.';
 	$language_data['Leave'] = 'Odejít';
 	$language_data['Download all as .ZIP archive'] = 'Stáhnout vše v archivu .ZIP';
-	
+	$language_data['Thank you for purchasing digital copy of <b>Born For A Storm</b>.'] = 'Děkujeme, že jste si zakoupili digitální kopii alba <b>Born For A Storm</b>.';

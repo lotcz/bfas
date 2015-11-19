@@ -9,4 +9,4 @@
 	$language_data['Sorry, we do not recognize this voucher code.'] = 'No código. No pase.';
 	$language_data['Leave'] = 'Hasta la vista.';
 	$language_data['Download all as .ZIP archive'] = 'Descargar todos como archivo .ZIP';
-	
+	$language_data['Thank you for purchasing digital copy of <b>Born For A Storm</b>.'] = 'Gracias por adquirir copia digital de <b>Born For A Storm</b>.';
