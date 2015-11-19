@@ -1,53 +1,31 @@
-<?php
-	
-	global $db;
-	
-	if (isset($_POST['user_id'])) {
-		// save user values
-		if ($_POST['user_id'] > 0) {
-			$user = User::LoadById($db, $_POST['user_id']);
-		} else {
-			$user = new User($db);
-		}
-		$user->user_login = $_POST['user_login'];
-		$user->user_email = $_POST['user_email'];
-		if (isset($_POST['user_password']) and strlen($_POST['user_password']) > 0) {
-			$user->user_password_hash = Authentication::hashPassword($_POST['user_password']);
-		}
-		$user->save();
-		redirect('/users');
-	} elseif (isset($path[1]) && $path[1] == 'edit') {
-		// load for edit
-		$user = User::LoadById($db, $path[2]);
-	} elseif (isset($path[1]) && $path[1] == 'delete') {
-		User::deleteById($db, $path[2]);
-		redirect('/users');
-	} else {
-		// new user
-		$user = new User($db);
-		$user->user_id = 0;
-	}
-	
-?>
 <div class="inner cover">	
-	<form method="post" action="/user" class="code-form">
+	<form method="post" action="/user" class="form-horizontal" style="max-width:480px;margin:auto">
 		<input type="hidden" name="user_id" value="<?php echo $user->user_id ?>" />
-		<div class="form-line">
-			<div class="form-label" /><?= t('Login:') ?><div class="form-input" /><input type="text" name="user_login" value="<?=$user->user_login ?>" /></div>
-			<span id="user_login_validation" class="form-validation"><?= t('Login or Email required.') ?></span>
+		<div class="form-group">
+			<label for="user_login" class="col-sm-5 control-label"><?= t('Login:') ?></label>
+			<div class="col-sm-7">
+				<input type="text" name="user_login" value="<?=$user->user_login ?>" class="form-control" />
+			</div>
+			<span id="user_login_validation" class="form-validation"><?= t('Login or Email required.') ?></span>			
 		</div>		
-		<div class="form-line">
-			<div class="form-label" /><?= t('E-mail:') ?></div><div class="form-input" /><input type="text" name="user_email" value="<?=$user->user_email ?>" /></div>
+		<div class="form-group">
+			<label for="user_email" class="col-sm-5 control-label"><?= t('E-mail:') ?></label>
+			<div class="col-sm-7">
+				<input type="text" name="user_email" value="<?=$user->user_email ?>" class="form-control" />
+			</div>
 			<span id="user_email_validation" class="form-validation"><?= t('Login or Email required.') ?></span>
 		</div>
-		<div class="form-line">
-			<div class="form-label" /><?= t('Password:') ?> </div><div class="form-input" /><input type="text" name="user_password" /></div>
+		<div class="form-group">
+			<label for="user_password" class="col-sm-5 control-label"><?= t('Password:') ?></label>
+			<div class="col-sm-7">
+				<input type="password" name="user_password" class="form-control" />
+			</div>
 			<span id="user_password_validation" class="form-validation"><?= t('Required.') ?></span>
 		</div>
-		<div class="form-line">
-			<a href="/users"><?= t('Back') ?></a>
-			<input type="button" onclick="javascript:deleteUser();" class="btn btn-danger" value="Delete">
-			<input type="button" onclick="javascript:validate();" class="btn btn-success" value="Save">
+		<div class="form-group">
+			<a class="form-button" href="/users"><?= t('Back') ?></a>
+			<input type="button" onclick="javascript:deleteUser();" class="btn btn-danger form-button" value="Delete">
+			<input type="button" onclick="javascript:validate();" class="btn btn-success form-button" value="Save">
 		</div>
 	</form>	
 </div>

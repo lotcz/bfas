@@ -1,5 +1,5 @@
 <?php
-
+	
 	function redirect($url, $statusCode = 303) {
 		global $base_url;
 		header('Location: ' . $base_url . $url, true, $statusCode);
@@ -23,5 +23,9 @@
 	}
 	
 	function mysqlTimestamp($d) {
-		return date('Y-m-d G:i:s', $d);
+		if (isset($d)) {
+			return date('Y-m-d G:i:s', $d);	
+		} else {
+			return null;
+		}		
 	}

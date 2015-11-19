@@ -35,11 +35,6 @@ input {
 	margin-left: auto;
 }
 
-/* Padding for spacing */
-.inner {
-
-}
-
 /*
  * Header
  */
@@ -107,6 +102,15 @@ input {
  * Affix and center
  */
 
+.mastfoot, .scrollfoot {
+	margin-top:45px;
+	color:#707070;
+}
+
+.mobile-hide {
+	display:none;
+}
+
 @media (min-width: 768px) {
   /* Pull out the header and footer */
   .masthead {
@@ -114,6 +118,7 @@ input {
     top: 0;
   }
   .mastfoot {
+	margin-top:0px;
     position: fixed;
     bottom: 0;
   }
@@ -127,6 +132,9 @@ input {
   .cover-container {
     width: 100%; /* Must be percentage or pixels for horizontal alignment */
   }
+  .mobile-hide {
+	display:none;
+	}
 }
 
 @media (min-width: 992px) {
@@ -140,6 +148,7 @@ input {
 table {
 	margin:25px auto;
 	background-color:inherit;
+	border:0;
 }
 
 table td, table th {
@@ -170,27 +179,26 @@ table th {
 
 .error-message {
 	color:pink;
+	margin-bottom:15px;
 }
 
 .voucher-code {
 	color:white;
-	font-size:30px;
-}
-
-.form-label, .form-input {
-    display: inline-block;
-    width: 50%;
-}
-
-.form-label {
-    text-align: right;
-}
-
-.form-input {
-	text-align:left;
+	font-size:36px;
 }
 
 .form-validation {
 	display:none;
 	color:pink;
+}
+
+.form-button {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.dimmed {
+	opacity:0.6;
+	-moz-opacity:0.6;
+	vertical-align:sub;
 }

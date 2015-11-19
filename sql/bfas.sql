@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_login` VARCHAR(100) NOT NULL,
   `user_email` VARCHAR(255) NOT NULL,
   `user_password_hash` VARCHAR(255) NOT NULL,
+  `user_failed_attempts` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `users_email_unique` (`user_email` ASC),
   UNIQUE INDEX `users_login_unique` (`user_login` ASC))

@@ -8,11 +8,13 @@ class Authentication {
 		
 	public $user = null;
 	
+	static $max_attempts = 100;
+	
 	function __construct($auth_db) {
 		$this->db = $auth_db;
 		$this->checkAuthentication();
 	}
-   
+
 	public function isAuth() {
 		return isset($this->user);
 	}
@@ -24,7 +26,7 @@ class Authentication {
 		}
 		
 		$user = User::loadByLoginOrEmail($this->db, $loginoremail);
-		if (isset($user)) {
+		if (isset($user) and $user->user_failed_attempts < $this::$max_attempts) {
 			if (password_verify($password, $user->user_password_hash)) {
 				// success - create new session
 				$this->user = $user;
@@ -41,6 +43,9 @@ class Authentication {
 				} else {
 					die('Session db error:' . $this->db->error);
 				}
+			} else {
+				$user->user_failed_attempts += 1;
+				$user->save();
 			}
 		}
 		

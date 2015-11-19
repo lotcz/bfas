@@ -25,7 +25,7 @@ class Voucher {
 				$statement->fetch();
 				$statement->close();			
 			} else {
-				die('Voucher db error:' . $this->db->error);
+				die('Voucher db error:' . $db->error);
 			}
 		}
 		if (isset($voucher->voucher_code)) {
@@ -45,7 +45,7 @@ class Voucher {
 				$statement->fetch();
 				$statement->close();			
 			} else {
-				die('Voucher db error:' . $this->db->error);
+				die('Voucher db error:' . $db->error);
 			}
 		}
 		if (isset($voucher->voucher_code)) {
@@ -88,7 +88,7 @@ class Voucher {
 				$statement->execute();				
 				$statement->close();			
 			} else {
-				die('Voucher db error:' . $this->db->error);
+				die('Voucher db error:' . $db->error);
 			}
 		}
 	}

@@ -1,10 +1,23 @@
 <?php 
 
 class Localization {
+		
+	public $lang_name = 'en';
+	public $cookie_name = 'language';
 	
-	function __construct($dir, $lang) {
-		$lang = strtolower(substr($lang,0,2));		
-		$file = $dir . $lang . '.php';
+	function __construct($dir, $lang = null) {
+		if (!isset($lang)) {
+			if (isset($_COOKIE[$this->cookie_name])) {
+				$lang_name = $_COOKIE[$this->cookie_name];
+			} else {
+				$lang_name = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+				$lang_name = strtolower(substr($lang_name,0,2));
+			}						
+		} else {
+			$lang_name = $lang;
+		}		
+		
+		$file = $dir . $lang_name . '.php';
 		
 		if (file_exists($file)) {			
 			require $file;

@@ -1,17 +1,20 @@
 <?php	
+	
+	$globals = [];
+	require_once 'config.php';	
+	$home_dir = $globals['home_dir'];
+	$base_url = $globals['base_url'];
+	
+	require_once $home_dir . 'classes/functions.php';
+	require_once $home_dir . 'classes/tokens.php';
+	require_once $home_dir . 'classes/user.php';
+	require_once $home_dir . 'classes/auth.php';
+	require_once $home_dir . 'classes/voucher.php';
+	require_once $home_dir . 'classes/claim.php';
+	require_once $home_dir . 'classes/localization.php';
 		
-	require_once '../classes/tokens.php';
-	require_once '../classes/user.php';
-	require_once '../classes/auth.php';
-	require_once '../classes/voucher.php';
-	require_once '../classes/claim.php';
-	require_once '../classes/localization.php';
-	
-	require_once '../classes/global.php';
-	
-	$base_url = 'http://bfas.loc';
-	$db = new mysqli('localhost', 'root', '', 'bfts');
-	$localization = new Localization('../lang/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+	$db = new mysqli($globals['db_host'], $globals['db_login'], $globals['db_password'], $globals['db_name']);
+	$localization = new Localization($home_dir . 'lang/');
 		
 	$template = 'default.php';
 	$page = 'front.php';
@@ -40,7 +43,7 @@
 					}
 					$claim->checkVoucherCode($_POST['voucher_code']);
 					if (!$claim->hasVoucher()) {						
-						$message = 'Sorry, we do not recognize this voucher code. Try again or contact TiNG guys if you think your voucher code is correct.';
+						$message = t('Sorry, we do not recognize this voucher code.');
 					}
 				}
 				if ($claim->hasVoucher()) {
@@ -53,7 +56,7 @@
 				if (isset($_POST['login'])) { 
 					$auth->login($_POST['login'], $_POST['password']);
 					if (!$auth->isAuth()) {
-						$message = 'Login incorrect!';
+						$message = t('Login incorrect!');
 					}
 				}
 				if ($auth->isAuth()) {
@@ -104,55 +107,12 @@
 		}
 		
 	}	
-	
-?><!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-		<meta name="description" content="">
-		<meta name="author" content="Karel Zavadil">
-		<link rel="icon" href="favicon.ico">
-
-		<title>Born For A Storm</title>
-
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-		<!-- Optional theme -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-
-		<!-- Custom styles for this template -->
-		<link href="/style.css" rel="stylesheet">
+	$codefile_path = 'code.' . $page;	
+	if (file_exists($home_dir . 'pages/' . $codefile_path)) {			
+		include $home_dir . 'pages/' . $codefile_path;
+	}
 		
-		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-		<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
-	</head>
-
-	<body>
-
-		<?php
-			include '../templates/' . $template;
-		?>
-
-		<!-- Bootstrap core JavaScript
-		================================================== -->
-		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-		<script src="/tools.js"></script>
-
-	</body>
-</html>
-<?php
+	include $home_dir . 'templates/master.php';
+	
 	$db->close();
-?>

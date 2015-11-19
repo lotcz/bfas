@@ -1,48 +1,28 @@
-<?php
-	
-	global $db;
-	
-	if (isset($_POST['voucher_id'])) {
-		// save voucher values
-		$voucher = Voucher::LoadById($db, $_POST['voucher_id']);
-		$voucher->voucher_customer_name = $_POST['customer_name'];
-		$voucher->voucher_customer_email = $_POST['customer_email'];
-		$voucher->save();
-		redirect('/admin');
-	} elseif (isset($path[1]) && $path[1] == 'edit') {
-		// load for edit
-		$voucher = Voucher::LoadById($db, $path[2]);
-	} elseif (isset($path[1]) && $path[1] == 'delete') {
-		Voucher::deleteById($db, $path[2]);
-		redirect('/admin');
-	} else {
-		// new voucher
-		$voucher = new Voucher($db);
-		do {
-			$voucher->voucher_code = Voucher::generateToken();	
-			$exist = Voucher::loadByCode($db, $voucher->voucher_code);
-		} while (isset($exist));
-		
-		$voucher->save();
-	}
-	
-?>
 <div class="inner cover">	
-	<form method="post" action="/voucher" class="code-form">
+	<form method="post" action="/voucher" class="form-horizontal" style="max-width:480px;margin:auto">
 		<input type="hidden" name="voucher_id" value="<?php echo $voucher->voucher_id ?>" />
-		<div class="form-line">
-			<div class="form-label" /><?= t('Voucher code:') ?><div class="form-input" /><span class="voucher-code"><?php echo $voucher->voucher_code ?></span></div>
+		<div class="form-group">
+			<label class="col-sm-5 control-label"><?= t('Voucher code:') ?></label>
+			<div class="col-sm-7">
+				<p class="form-control-static voucher-code"><?php echo $voucher->voucher_code ?></p>
+			</div>
 		</div>
-		<div class="form-line">
-			<div class="form-label" /><?= t('Customer e-mail:') ?></div><div class="form-input" /><input type="text" name="customer_email" value="<?=$voucher->voucher_customer_email ?>" /></div>
+		<div class="form-group">
+			<label for="customer_email" class="col-sm-5 control-label"><?= t('Customer e-mail:') ?></label>
+			<div class="col-sm-7">
+				<input type="text" name="customer_email" value="<?=$voucher->voucher_customer_email ?>" class="form-control" />
+			</div>
 		</div>
-		<div class="form-line">
-			<div class="form-label" /><?= t('Customer name:') ?> </div><div class="form-input" /><input type="text" name="customer_name" value="<?=$voucher->voucher_customer_name ?>" /></div>
+		<div class="form-group">
+			<label for="customer_name" class="col-sm-5 control-label"><?= t('Customer name:') ?></label>
+			<div class="col-sm-7">
+				<input type="text" name="customer_name" value="<?=$voucher->voucher_customer_name ?>" class="form-control" />
+			</div>
 		</div>
-		<div class="form-line">
-			<a href="/admin"><?= t('Back') ?></a>
-			<input type="button" onclick="javascript:deleteVoucher();" class="btn btn-danger" value="Delete">
-			<input type="submit" class="btn btn-success" value="Save">
+		<div class="form-group">
+			<a class="form-button" href="/admin"><?= t('Back') ?></a>
+			<input type="button" onclick="javascript:deleteVoucher();" class="btn btn-danger form-button" value="Delete">
+			<input type="submit" class="btn btn-success form-button" value="Save">			
 		</div>
 	</form>	
 </div>

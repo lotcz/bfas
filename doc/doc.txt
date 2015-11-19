@@ -1,7 +1,6 @@
 TO DO:
 
 	-	DEPLOY
-	- test on phone (use bootstap classes for forms)
 	-	boast
 	-----------------------------------------
 	-	google analytics
