@@ -10,8 +10,8 @@
 			$user = new User($db);
 		}
 		$user->user_login = $_POST['user_login'];
-		$user->user_email = $_POST['user_email'];
-		if (isset($_POST['user_password']) and strlen($_POST['user_password']) > 0) {
+		$user->user_email = strtolower($_POST['user_email']);
+		if (isset($_POST['user_password']) && strlen($_POST['user_password']) > 0) {
 			$user->user_password_hash = Authentication::hashPassword($_POST['user_password']);
 		}
 		$user->save();

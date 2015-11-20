@@ -26,7 +26,10 @@ class Authentication {
 		}
 		
 		$user = User::loadByLoginOrEmail($this->db, $loginoremail);
-		if (isset($user) and $user->user_failed_attempts < $this::$max_attempts) {
+		if (isset($user)) {
+			if ($user->user_failed_attempts > $this::$max_attempts) {
+				redirect('/error.html');
+			}
 			if (password_verify($password, $user->user_password_hash)) {
 				// success - create new session
 				$this->user = $user;

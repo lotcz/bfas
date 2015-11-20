@@ -11,9 +11,19 @@
 	require_once $home_dir . 'classes/auth.php';
 	require_once $home_dir . 'classes/voucher.php';
 	require_once $home_dir . 'classes/claim.php';
+	require_once $home_dir . 'classes/attempt.php';
 	require_once $home_dir . 'classes/localization.php';
-		
+	
 	$db = new mysqli($globals['db_host'], $globals['db_login'], $globals['db_password'], $globals['db_name']);
+	
+	$client_ip = $_SERVER['REMOTE_ADDR'];
+	$attempt = ClaimAttempt::loadByIP($db, $client_ip);
+	if (isset($attempt)) {
+		if ($attempt->claim_attempt_count > ClaimAttempt::$max_attempts) {								
+			redirect('/error.html');
+		}
+	}
+	
 	$localization = new Localization($home_dir . 'lang/');
 		
 	$template = 'default.php';
@@ -40,9 +50,10 @@
 				if (isset($_POST['voucher_code'])) { 
 					if (strtolower($_POST['voucher_code']) == 'ting') {
 						redirect('/admin');
-					}
+					}					
 					$claim->checkVoucherCode($_POST['voucher_code']);
-					if (!$claim->hasVoucher()) {						
+					if (!$claim->hasVoucher()) {
+						ClaimAttempt::save($db, $client_ip);
 						$message = t('Sorry, we do not recognize this voucher code.');
 					}
 				}

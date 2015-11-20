@@ -12,8 +12,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE INDEX `users_login_unique` (`user_login` ASC))
 ENGINE = InnoDB;
 
-INSERT INTO `users` (`user_login`,`user_email`, `user_password_hash`) VALUES ( 'karel', 'mojemejly@centrum.cz', '$2y$10$bhLm9lallISZPBloadZvH.NgvbGnijLJCvRAWkIlYNzycdTWI2w4S' ); /*karel123*/
-
 DROP TABLE IF EXISTS `user_sessions` ;
 
 CREATE TABLE IF NOT EXISTS `user_sessions` (
@@ -41,4 +39,15 @@ CREATE TABLE IF NOT EXISTS `vouchers` (
   `voucher_used` TIMESTAMP NULL,
   PRIMARY KEY (`voucher_id`),
   UNIQUE INDEX `voucher_code_unique` (`voucher_code` ASC)
+) ENGINE = InnoDB;
+
+DROP TABLE IF EXISTS `claim_attempts` ;
+
+CREATE TABLE IF NOT EXISTS `claim_attempts` (
+  `claim_attempt_ip` VARCHAR(15),
+  `claim_attempt_count` INT NOT NULL DEFAULT 1,
+  `claim_attempt_first` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `claim_attempt_last` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`claim_attempt_ip`),
+  INDEX `claim_attempt_last_index` (`claim_attempt_last` DESC)
 ) ENGINE = InnoDB;

@@ -24,7 +24,7 @@ class User {
 				$statement->fetch();
 				$statement->close();			
 			} else {
-				die('User db error:' . $this->db->error);
+				die('User db error:' . $db->error);
 			}
 		}
 		if (isset($user->user_id)) {
@@ -44,7 +44,7 @@ class User {
 				$statement->fetch();
 				$statement->close();			
 			} else {
-				die('User db error:' . $this->db->error);
+				die('User db error:' . $db->error);
 			}
 		}
 		if (isset($user->user_id)) {
@@ -87,7 +87,7 @@ class User {
 				$statement->execute();				
 				$statement->close();			
 			} else {
-				die('User db error:' . $this->db->error);
+				die('User db error:' . $db->error);
 			}
 		}
 	}
